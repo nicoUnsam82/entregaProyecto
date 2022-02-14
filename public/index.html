@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title>EJERCICIOS DE PRACTICA</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js" referrerpolicy="no-referrer"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <!--JQUERY UI PARA AUTOCOMPLETAR-->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+</head>
+
+<body class="bg-light">
+
+    <header class="encabezado">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item active" aria-current="page">Pagina Principal</li>
+            </ol>
+        </nav>
+
+        <h1 class="encabezado__titulos display-4">EJERCICIO CLASE 10</h1>
+
+    </header>
+
+    <main>
+
+        <section>
+
+            <!--INICIO FORMULARIO DE PRODUCTOS-->
+            <form id="productoAgregar" class="row g-6" action="/api/productos" method="post">
+                <!-- CARD 1 -->
+                <div class="col-xl-6 col-md-10 mb-5 d-inline-flex">
+                    <div class="card border-left-primary shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1 ui-widget">
+                                    <label for="nombreProducto" class="form-label">NOMBRE DEL PRODUCTO</label>
+                                    <input type="text" class="form-control" id="nombreProducto" name="nombreProducto"
+                                        required>
+                                </div>
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1 ui-widget">
+                                    <label for="precioProducto" class="form-label">PRECIO DEL PRODUCTO</label>
+                                    <input type="number" class="form-control" id="precioProducto" name="precio"
+                                        required>
+                                </div>
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1 ui-widget">
+                                    <label for="urlProducto" class="form-label">URL</label>
+                                    <input type="text" class="form-control" id="urlProducto" name="urlProducto" required>
+                                </div>
+
+                                <!-- BOTON DE ENVIO -->
+
+                                <div class="col-12 d-inline-flex">
+                                    <input type="submit" class="btn btn-outline-success" value="ENVIAR DATOS"
+                                        id="botonEnvioDatos">
+                                </div>
+                            </div>
+
+                        </div>
+                        <!--LISTADOS DE PRODUCTOS-->
+
+                        <div id="hbsTablaProductos">
+
+
+                        </div>
+                        <!--FIN LISTADOS DE PRODUCTOS-->
+                    </div>
+
+                </div>
+            </form>
+            <!--FIN DE FORMULARIO-->
+
+
+        </section>
+
+        <footer class="sticky-footer bg-white">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>Copyright &copy; <a href="#" target="_blank">EJERCICIOS DE PRACTICA</a></span>
+                </div>
+            </div>
+        </footer>
+    </main>
+  
+    <!--BOOTSTRAP-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+</body>
+
+</html>
