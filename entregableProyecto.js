@@ -1,8 +1,8 @@
 const express = require("express");
 const hbs= require("express-handlebars");
+const rutaInvalida = require("./rutas/rutaInvalida");
 const productos = require('./rutas/productos');
 const carrito = require('./rutas/carrito');
-const rutaInvalida = require("./rutas/rutaInvalida");
 const { Server: HttpServer } = require('http');
 const { Server: IOServer } = require('socket.io');
 const path = require('path');
@@ -21,7 +21,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/api', productos);
 app.use('/api', carrito);
-//app.use(rutaInvalida.rutaInvalida);
+app.use(rutaInvalida.rutaInvalida);
+
 
 //HANDLEBARS
 app.engine("hbs",hbs.engine({
