@@ -1,14 +1,11 @@
-const cl_Contenedor= require("../clases/contenedor.js");
-
-
 module.exports = class Carrito {
-    productos = new cl_Contenedor;
+    //productos = new cl_Contenedor;
     carrito =[];
     static idGlobal = 0;
     static idBorrados = [];
 
 
-    constructor() {
+    constructor(productos) {
         this.carrito;
         this.productos;
         this.idCarrito=0;

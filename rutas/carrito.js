@@ -1,8 +1,9 @@
 const cl_Carrito= require("../clases/carritoClase.js");
+const cl_Contenedor= require("../clases/contenedor.js");
 const express = require('express');
 const router = express.Router();
-
-let carrito = new cl_Carrito;
+let producto =new cl_Contenedor;
+let carrito = new cl_Carrito(producto);
 
 
 router.get('/carrito/:id/productos', (req, res) => {
