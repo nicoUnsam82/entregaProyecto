@@ -11,7 +11,16 @@ async function mostrarProductosPrueba(data){
   
   }
 //PRUEBA SOBRE PRODUCTOS
+async function mostrarCarritoPrueba(data){
 
+    const fetchTemplateHbsCarritoProductos = await fetch("./views/partials/listaCarritos.hbs");
+    const templateHbsCarritoProductos=await fetchTemplateHbsCarritoProductos.text();
+    const template = Handlebars.compile(templateHbsCarritoProductos);
+    const html = template({carritoLista:data});
+    document.querySelector("#pruebaApiCarrito").innerHTML =html;
+  
+  }
+//PRUEBA SOBRE CARRITO
 //BORRAR PRODUCTO POR ID
 function borrarProductoPorId(id){
 
@@ -32,3 +41,28 @@ async function obtenerProductos(){
     
 }//FIN DE FUNCION OBTENER PRODUCTOS
 
+async function obtenerProductoPorId(id){
+    let producto=await $.ajax({
+        type: "GET",
+        url: `api/productos/${id}`,
+        data: {"nombreProducto" : "valor1", "precioProducto" : "valor2","urlProducto":"valor3","id":"valor4"},
+        dataType: "json",
+        
+    });
+    console.log(producto);
+    mostrarProductosPrueba(producto);
+    
+}//FIN DE FUNCION OBTENER PRODUCTOS
+
+//PRUEBA SOBRE CARRITO
+
+async function CrearCarrito(){
+    let carritoDato=await $.ajax({
+        type: "POST",
+        url: "api/carrito/",
+    });
+    let  carrito ={idCarrito:carritoDato};
+    console.log(carrito);
+    mostrarCarritoPrueba(carrito);
+    
+}//FIN DE FUNCION OBTENER PRODUCTOS

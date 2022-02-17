@@ -2,7 +2,6 @@
 
 module.exports = class Contenedor {
     productos =[];
-    static idGlobal = 0;
     static idBorrados = [];
 
 

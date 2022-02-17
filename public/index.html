@@ -76,11 +76,15 @@
                                     <button type="button" class="btn btn-outline-success"
                                         onclick="obtenerProductos()">OBTENER TODOS LOS PRODUCTOS</button>
                                 </div>
+                                <div class="m-1 col-3 d-inline-flex">
+                                    <button type="button" class="btn btn-outline-success"
+                                        onclick="obtenerProductoPorId(2)">OBTENER PRODUCTO ID</button>
+                                </div>
                             </div>
 
                         </div>
                         <!--LISTADOS DE PRODUCTOS-->
-                        <h2>DATOS ENVIADOS</h2>
+                        <h2>DATOS ENVIADOS PRODUCTO</h2>
 
                         <div id="hbsTablaProductos">
 
@@ -88,7 +92,7 @@
                         </div>
                         <!--FIN LISTADOS DE PRODUCTOS-->
                         <!-- PRUEBA DE API PRODUCTOS-->
-                        <h2>DATOS DE PRUEBAS</h2>
+                        <h2>DATOS DE PRUEBAS PRODUCTO</h2>
                         <div id="pruebaApiProductos">
 
 
@@ -99,7 +103,71 @@
                 </div>
             </form>
             <!--FIN DE FORMULARIO-->
+            <!--INICIO FORMULARIO DE CARRITO-->
+            <h2>CARRITO</h2>
+            <form id="carritoAgregar" class="row g-6">
+                <!-- CARD 1 -->
+                <div class="col-xl-6 col-md-10 mb-5 d-inline-flex">
+                    <div class="card border-left-primary shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1 ui-widget">
+                                    <label for="nombreProducto" class="form-label">NOMBRE DEL PRODUCTO</label>
+                                    <input type="text" class="form-control" id="nombreProducto" name="nombreProducto"
+                                        required>
+                                </div>
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1 ui-widget">
+                                    <label for="precioProducto" class="form-label">PRECIO DEL PRODUCTO</label>
+                                    <input type="number" class="form-control" id="precioProducto" name="precio"
+                                        required>
+                                </div>
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1 ui-widget">
+                                    <label for="urlProducto" class="form-label">URL</label>
+                                    <input type="text" class="form-control" id="urlProducto" name="urlProducto"
+                                        required>
+                                </div>
 
+                                <!-- BOTON DE ENVIO -->
+
+                                <div class="col-3 d-inline-flex">
+                                    <input type="submit" class="btn btn-outline-success" value="ENVIAR DATOS"
+                                        id="botonEnvioDatos">
+                                </div>
+                                <div class="m-1 col-3 d-inline-flex">
+                                    <button type="button" class="btn btn-outline-success"
+                                        onclick="CrearCarrito()">CREAR CARRITO</button>
+                                </div>
+                                <div class="m-1 col-3 d-inline-flex">
+                                    <button type="button" class="btn btn-outline-success"
+                                        onclick="obtenerProductos()">OBTENER TODOS LOS PRODUCTOS</button>
+                                </div>
+                                <div class="m-1 col-3 d-inline-flex">
+                                    <button type="button" class="btn btn-outline-success"
+                                        onclick="obtenerProductoPorId(2)">OBTENER PRODUCTO ID</button>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!--LISTADOS DE PRODUCTOS-->
+                        <h2>DATOS ENVIADOS CARRITO</h2>
+
+                        <div id="hbsTablaCarrito">
+
+
+                        </div>
+                        <!--FIN LISTADOS DE PRODUCTOS-->
+                        <!-- PRUEBA DE API PRODUCTOS-->
+                        <h2>DATOS DE PRUEBAS CARRITO</h2>
+                        <div id="pruebaApiCarrito">
+
+
+                        </div>
+                        <!--FIN PRUEBA DE API DE PRODUCTOS-->
+                    </div>
+
+                </div>
+            </form>
+            <!--FIN DE FORMULARIO-->
 
         </section>
 

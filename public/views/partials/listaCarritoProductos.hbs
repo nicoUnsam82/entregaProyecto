@@ -1,0 +1,18 @@
+<div class="table-responsive"></div>
+<table class="table table-striped">
+    <tr>
+        <th>idCarrito</th>
+        <th>NombreProducto</th>
+        <th>PrecioProducto</th>
+        <th>FotoProducto</th>
+        <th>IdProducto</th>
+    </tr>
+    {{#each carritoProductos}}<tr>
+        <td>{{this.idCarrito}}</td>
+        <td>{{this.nombreProducto}}</td>
+        <td>{{this.precioProducto}}</td>
+        <td><img src={{this.urlProducto}} width=150 height=80></td>
+        <td>{{this.idProducto}}</td>
+    </tr>{{/each}}
+</table>
+</div>

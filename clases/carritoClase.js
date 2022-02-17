@@ -1,14 +1,11 @@
-module.exports = class Carrito {
-    //productos = new cl_Contenedor;
-    carrito =[];
-    static idGlobal = 0;
-    static idBorrados = [];
-
-
-    constructor(productos) {
-        this.carrito;
-        this.productos;
-        this.idCarrito=0;
+module.exports = class Carrito { 
+    //productos = new cl_Carrito;SE SACO PARA QUE LA CLASE CARRITO NO DEPENDE DE OTRA CLASE Y SE PASA POR PARAMETRO
+    constructor(productos)
+     {  
+        this.productos=productos;
+        this.carrito.push(this.productos);
+        this.carrito.idCarrito=[];
+        this.idBorrados=[];
         this.horarioDeCreacionCarrito = Date.now()
 
     }//FIN DEL CONSTRUCTOR
@@ -16,24 +13,20 @@ module.exports = class Carrito {
     async generarCarro() {
 
         try {
-
-            let largoArrayObjetos= this.productos.length;
-            let idMasAlto= 0;
-            if (largoArrayObjetos > 0) {
-                idMasAlto = this.productos.reduce((anterior, proximo) => anterior > proximo.id ? anterior : proximo.id, 0);
-
-            }//FIN DEL IF
-            let largoIdBorrados =Contenedor.idBorrados.length;
-            console.log(largoIdBorrados);
+            
+            let idAsignar=this.carrito.idCarrito.length;
+            let largoIdBorrados =this.idBorrados.length;
             switch(largoIdBorrados){
 
             case 0:
-                this.idCarrito = idMasAlto + 1;
-                return this.idCarrito;
+                idAsignar=idAsignar+1;
+                this.carrito.idCarrito.push(idAsignar);
+                return this.carrito.idCarrito;
             default:
-                this.idCarrito =Contenedor.idBorrados[0]
-                Contenedor.idBorrados.shift();
-                return this.idCarrito;            
+                largoIdCarrito=this.carrito.length;
+                this.carrito.idCarrito[largoIdCarrito]=this.idBorrados[0];
+                this.idBorrados.shift();
+                return this.carrito.idCarrito;            
 
             }
   
@@ -86,7 +79,7 @@ module.exports = class Carrito {
             this.carrito = this.carrito.filter(idBuscado => idBuscado.idCarrito != idBusqueda);
 
             if (largoCarritoBorrado!= 0) {
-                Contenedor.idBorrados.push(idBusqueda);
+                Carrito.idBorrados.push(idBusqueda);
                 return carritoBorrado;
             }
             else {
