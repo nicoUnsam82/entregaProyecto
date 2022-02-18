@@ -1,9 +1,10 @@
+const cl_Contenedor= require("../clases/contenedor.js");
+
 module.exports = class Carrito { 
     //productos = new cl_Carrito;SE SACO PARA QUE LA CLASE CARRITO NO DEPENDE DE OTRA CLASE Y SE PASA POR PARAMETRO
     constructor(productos)
      {  
-        this.productos=productos;
-        this.carrito.push(this.productos);
+        this.carrito=new cl_Contenedor;
         this.carrito.idCarrito=[];
         this.idBorrados=[];
         this.horarioDeCreacionCarrito = Date.now()
@@ -46,10 +47,10 @@ module.exports = class Carrito {
     async obtenerProductosPorCarritoId(idBusqueda) {
         try {
             let id =parseInt(idBusqueda);
-            const largoArrayCarrito = this.carrito.length;
+            const largoArrayCarrito = this.carrito.idCarrito.length;
             if (largoArrayCarrito > id) {
                 const carrito = this.carrito.filter(idBuscado => idBuscado.idCarrito == id);
-                return carrito.productos.obtenerObjetoEnProductos();
+                return this.carrito.obtenerObjetoEnProductos();
             }
             else {
 
@@ -104,11 +105,11 @@ module.exports = class Carrito {
     async guardarProductosPorCarritoId(idBusqueda,objeto) {
         try {
             let id =parseInt(idBusqueda);
-            const largoArrayCarrito = this.carrito.length;
+            const largoArrayCarrito = this.carrito.idCarrito.length;
             if (largoArrayCarrito > id) {
                 const carrito = this.carrito.filter(idBuscado => idBuscado.idCarrito == id);
                 const carritoSinidActualizar= this.carrito.filter(idBuscado => idBuscado.idCarrito != id);
-                carrito.productos.guardar(objeto);
+                this.carrito.guardar(objeto);
                 const carritoActualizado=carritoSinidActualizar.push(carrito);
                 this.carrito=carritoActualizado;
 
