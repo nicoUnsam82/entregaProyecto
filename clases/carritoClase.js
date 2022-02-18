@@ -5,7 +5,7 @@ module.exports = class Carrito {
     constructor(productos)
      {  
         this.carrito=new cl_Contenedor;
-        this.carrito.idCarrito=[];
+        this.carrito.idCarrito=0;
         this.idBorrados=[];
         this.horarioDeCreacionCarrito = Date.now()
 
@@ -14,14 +14,11 @@ module.exports = class Carrito {
     async generarCarro() {
 
         try {
-            
-            let idAsignar=this.carrito.idCarrito.length;
             let largoIdBorrados =this.idBorrados.length;
             switch(largoIdBorrados){
 
             case 0:
-                idAsignar=idAsignar+1;
-                this.carrito.idCarrito.push(idAsignar);
+                this.carrito.idCarrito+=1;;
                 return this.carrito.idCarrito;
             default:
                 largoIdCarrito=this.carrito.length;
@@ -47,10 +44,10 @@ module.exports = class Carrito {
     async obtenerProductosPorCarritoId(idBusqueda) {
         try {
             let id =parseInt(idBusqueda);
-            const largoArrayCarrito = this.carrito.idCarrito.length;
+            const largoArrayCarrito = this.carrito.length;
             if (largoArrayCarrito > id) {
                 const carrito = this.carrito.filter(idBuscado => idBuscado.idCarrito == id);
-                return this.carrito.obtenerObjetoEnProductos();
+                return this.carrito.productos.obtenerObjetoEnProductos();
             }
             else {
 
@@ -105,11 +102,11 @@ module.exports = class Carrito {
     async guardarProductosPorCarritoId(idBusqueda,objeto) {
         try {
             let id =parseInt(idBusqueda);
-            const largoArrayCarrito = this.carrito.idCarrito.length;
+            const largoArrayCarrito = this.carrito.length;
             if (largoArrayCarrito > id) {
                 const carrito = this.carrito.filter(idBuscado => idBuscado.idCarrito == id);
                 const carritoSinidActualizar= this.carrito.filter(idBuscado => idBuscado.idCarrito != id);
-                this.carrito.guardar(objeto);
+                this.carrito.productos.guardar(objeto);
                 const carritoActualizado=carritoSinidActualizar.push(carrito);
                 this.carrito=carritoActualizado;
 
