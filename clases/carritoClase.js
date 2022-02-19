@@ -150,10 +150,10 @@ module.exports = class Carrito{
             let idProductoBorrar = parseInt(idProducto);
             const idCarritoBuscado = this.idCarrito.filter(idBuscado => idBuscado == idCarritoSeleccion);
             if (idCarritoBuscado) {
-                const idProductoAEliminar=this.productos.filter(idBuscado => idBuscado.id == idProductoBorrar);
+                console.log(this.productos);
+                const idProductoAEliminar=this.productos.borrarObjetoPorId(idProductoBorrar);
                 if(idProductoAEliminar){
-                const productosConBorrarProducto =this.productos.filter(idBuscado => idBuscado.id != idProductoBorrar);
-                this.productos = productosConBorrarProducto;
+                return idProductoAEliminar;
                 }
                 else{
                     return { error: 'producto no encontrado' };
