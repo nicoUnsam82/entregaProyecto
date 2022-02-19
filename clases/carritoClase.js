@@ -1,12 +1,12 @@
-const cl_Contenedor= require("../clases/contenedor.js");
+const cl_Contenedor = require("../clases/contenedor.js");
+//HABRIA QUE VER LA FORMA DE QUE NO ESTE, PARA QUE LA CLASE DATO NO DEPENDA DE LA CLASE CONTENEDOR(PASAR POR PARAMETRO PERO HAY QUE VER COMO YA TOMAS LAS FUNCIONES)
+module.exports = class Carrito{
+    static asignarId = 0;
+    static idBorradosCarrito = [];
 
-module.exports = class Carrito { 
-    //productos = new cl_Carrito;SE SACO PARA QUE LA CLASE CARRITO NO DEPENDE DE OTRA CLASE Y SE PASA POR PARAMETRO
-    constructor(productos)
-     {  
-        this.carrito=new cl_Contenedor;
-        this.carrito.idCarrito=0;
-        this.idBorrados=[];
+    constructor() {
+        this.productos= new cl_Contenedor;
+        this.idCarrito= [];
         this.horarioDeCreacionCarrito = Date.now()
 
     }//FIN DEL CONSTRUCTOR
@@ -14,20 +14,22 @@ module.exports = class Carrito {
     async generarCarro() {
 
         try {
-            let largoIdBorrados =this.idBorrados.length;
-            switch(largoIdBorrados){
+            let largoidBorradosCarrito = Carrito.idBorradosCarrito.length;
+            switch (largoidBorradosCarrito) {
 
-            case 0:
-                this.carrito.idCarrito+=1;;
-                return this.carrito.idCarrito;
-            default:
-                largoIdCarrito=this.carrito.length;
-                this.carrito.idCarrito[largoIdCarrito]=this.idBorrados[0];
-                this.idBorrados.shift();
-                return this.carrito.idCarrito;            
+                case 0:
+                    Carrito.asignarId = Carrito.asignarId+1;
+                    this.idCarrito.push(Carrito.asignarId);
+                    const largoIdCarrito=this.idCarrito.length;
+                    return this.idCarrito[largoIdCarrito-1];
+                default:
+                    largoIdCarrito = this.idCarrito.length;
+                    this.idCarrito[largoIdCarrito] = Carrito.idBorradosCarrito[0];
+                    Carrito.idBorradosCarrito.shift();
+                    return this.idCarrito[largoIdCarrito];
 
             }
-  
+
         }//FIN DEL TRY
         catch (e) {
 
@@ -38,51 +40,23 @@ module.exports = class Carrito {
 
         }//FIN DEL CATCH
 
-        
+
     }//FIN DE METODO GUARDAR
 
-    async obtenerProductosPorCarritoId(idBusqueda) {
-        try {
-            let id =parseInt(idBusqueda);
-            const largoArrayCarrito = this.carrito.length;
-            if (largoArrayCarrito > id) {
-                const carrito = this.carrito.filter(idBuscado => idBuscado.idCarrito == id);
-                return this.carrito.productos.obtenerObjetoEnProductos();
-            }
-            else {
-
-                return { error : 'carrito no encontrado' };
-            }
-
-
-        }//FIN DEL TRY
-        catch (e) {
-
-            console.error(new Error("ERROR EN OBTENER PRODUCTOS DE CARRITO POR ID"));
-            throw (e);
-
-
-        }//FIN DEL CATCH
-
-
-
-    }//FIN DEL METODO OBTENER PRODUCTOS POR ID POR CARRITO
-
-    
     async borrarCarritoPorId(idBusqueda) {
         try {
 
-            const carritoBorrado = this.carrito.filter(idBuscado => idBuscado.idCarrito == idBusqueda);
+            const carritoBorrado = this.idCarrito.filter(idBuscado => idBuscado == idBusqueda);
             const largoCarritoBorrado = carritoBorrado.length;
-            this.carrito = this.carrito.filter(idBuscado => idBuscado.idCarrito != idBusqueda);
+            this.idCarrito = this.idCarrito.filter(idBuscado => idBuscado.idCarrito != idBusqueda);
 
-            if (largoCarritoBorrado!= 0) {
-                Carrito.idBorrados.push(idBusqueda);
+            if (largoCarritoBorrado != 0) {
+                Carrito.idBorradosCarrito.push(idBusqueda);
                 return carritoBorrado;
             }
             else {
 
-                return { error : 'carrito no encontrado' };
+                return { error: 'carrito no encontrado' };
             }
 
 
@@ -99,21 +73,23 @@ module.exports = class Carrito {
 
     }//FIN DEL METODO BORRAR CARRITO POR ID
 
-    async guardarProductosPorCarritoId(idBusqueda,objeto) {
+    async guardarProductosPorCarritoId(idBusqueda, objeto) {
         try {
-            let id =parseInt(idBusqueda);
-            const largoArrayCarrito = this.carrito.length;
-            if (largoArrayCarrito > id) {
-                const carrito = this.carrito.filter(idBuscado => idBuscado.idCarrito == id);
-                const carritoSinidActualizar= this.carrito.filter(idBuscado => idBuscado.idCarrito != id);
-                this.carrito.productos.guardar(objeto);
-                const carritoActualizado=carritoSinidActualizar.push(carrito);
-                this.carrito=carritoActualizado;
-
+            let id = parseInt(idBusqueda);
+            const idCarritoBuscado = this.idCarrito.filter(idBuscado => idBuscado == id);
+            if (idCarritoBuscado) {
+               this.productos.guardar(objeto);
+               this.productos.idCarrito=idCarritoBuscado;
+               let productoGuardado;
+               if(this.productos.idCarrito==idBusqueda){
+                productoGuardado=this.productos;
+               }
+              
+               return productoGuardado;
             }
             else {
 
-                return { error : 'carrito no encontrado' };
+                return { error: 'carrito no encontrado' };
             }
 
 
@@ -130,23 +106,63 @@ module.exports = class Carrito {
 
     }//FIN DEL METODO GUARDAR PRODUCTOS POR ID POR CARRITO
 
-    async borrarPorIdCarritoIdProducto(idCarrito,idProducto) {
+    async obtenerProductosPorCarritoId(idBusqueda) {
         try {
-            let idCarritoSeleccion  = parseInt(idCarrito);
+            let id = parseInt(idBusqueda);
+            const idCarritoBuscado = this.idCarrito.filter(idBuscado => idBuscado == id);
+            if (idCarritoBuscado) {
+                this.productos.idCarrito=idCarritoBuscado;
+                let productoGuardado;
+                if(this.productos.idCarrito==idBusqueda){
+                 productoGuardado=this.productos;
+                }
+               
+                return productoGuardado;
+            
+            }
+            else {
+
+                return { error: 'carrito no encontrado' };
+            }
+
+
+        }//FIN DEL TRY
+        catch (e) {
+
+            console.error(new Error("ERROR EN OBTENER PRODUCTOS DE CARRITO POR ID"));
+            throw (e);
+
+
+        }//FIN DEL CATCH
+
+
+
+    }//FIN DEL METODO OBTENER PRODUCTOS POR ID POR CARRITO
+
+
+
+
+
+
+    async borrarPorIdCarritoIdProducto(idCarrito, idProducto) {
+        try {
+            let idCarritoSeleccion = parseInt(idCarrito);
             let idProductoBorrar = parseInt(idProducto);
-            const largoArrayCarrito = this.carrito.length;
-            if (largoArrayCarrito > idCarritoSeleccion) {
-                const carrito = this.carrito.filter(idBuscado => idBuscado.idCarrito == idCarritoSeleccion);
-                const carritoSinidActualizar= this.carrito.filter(idBuscado => idBuscado.idCarrito != idCarritoSeleccion);
-                const productoBorrado=carrito.productos.borrarObjetoPorId(idProductoBorrar);
-                const carritoActualizado=carritoSinidActualizar.push(carrito);
-                this.carrito=carritoActualizado;
-                return productoBorrado;
+            const idCarritoBuscado = this.idCarrito.filter(idBuscado => idBuscado == idCarritoSeleccion);
+            if (idCarritoBuscado) {
+                const idProductoAEliminar=this.productos.filter(idBuscado => idBuscado.id == idProductoBorrar);
+                if(idProductoAEliminar){
+                const productosConBorrarProducto =this.productos.filter(idBuscado => idBuscado.id != idProductoBorrar);
+                this.productos = productosConBorrarProducto;
+                }
+                else{
+                    return { error: 'producto no encontrado' };
+                }
 
             }
             else {
 
-                return { error : 'carrito no encontrado' };
+                return { error: 'carrito no encontrado' };
             }
 
 
@@ -163,7 +179,7 @@ module.exports = class Carrito {
 
     }//FIN DEL METODO GUARDAR PRODUCTOS POR ID POR CARRITO
 
-    
+
 
 
 }//FIN DE LA CLASE CARRITO

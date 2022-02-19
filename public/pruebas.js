@@ -56,7 +56,7 @@ async function obtenerProductoPorId(id){
 
 //PRUEBA SOBRE CARRITO
 
-async function CrearCarrito(){
+async function crearCarrito(){
     let carritoDato=await $.ajax({
         type: "POST",
         url: "api/carrito/",
@@ -65,4 +65,38 @@ async function CrearCarrito(){
     console.log(carrito);
     mostrarCarritoPrueba(carrito);
     
+}//FIN DE FUNCION OBTENER PRODUCTOS
+
+async function borrarCarrito(){
+    let carritoDato=await $.ajax({
+        type: "DELETE",
+        url: "api/carrito/1",
+    });
+    let  carrito ={idCarrito:carritoDato};
+    console.log(carrito);
+    mostrarCarritoPrueba(carrito);
+    
+}//FIN DE FUNCION OBTENER PRODUCTOS
+
+async function guardarProductoporIdCarro(){
+    let carritoDato=await $.ajax({
+        type: "POST",
+        url: "api/carrito/1/productos",
+        data: {"nombreProducto" : "TV", "precioProducto" : "100","urlProducto":"http://TV.com","id":"1"},
+        dataType: "json",
+    });
+    let  carrito ={idCarrito:carritoDato};
+    console.log(carrito);
+    mostrarCarritoPrueba(carrito);
+}//FIN DE FUNCION OBTENER PRODUCTOS
+
+async function eliminarProductoporIdCarroIdProducto(){
+    let carritoDato=await $.ajax({
+        type: "DELETE",
+        url: "api/carrito/1/productos/1",
+        
+    });
+    let  carrito ={idCarrito:carritoDato};
+    console.log(carrito);
+    mostrarCarritoPrueba(carrito);
 }//FIN DE FUNCION OBTENER PRODUCTOS

@@ -103,7 +103,7 @@ router.delete('/carrito/:id', (req, res) => {
 
 });
 
-router.delete('/:id/productos/:id_prod', (req, res) => {
+router.delete('/carrito/:id/productos/:id_prod', (req, res) => {
     try {
 
         (async () => {
