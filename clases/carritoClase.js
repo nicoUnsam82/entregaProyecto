@@ -82,7 +82,7 @@ module.exports = class Carrito{
                this.productos.idCarrito=idCarritoBuscado;
                let productoGuardado;
                if(this.productos.idCarrito==idBusqueda){
-                productoGuardado=this.productos;
+                productoGuardado=this.productos.obtenerObjetoEnProductos;
                }
               
                return productoGuardado;
@@ -114,7 +114,7 @@ module.exports = class Carrito{
                 this.productos.idCarrito=idCarritoBuscado;
                 let productoGuardado;
                 if(this.productos.idCarrito==idBusqueda){
-                 productoGuardado=this.productos;
+                 productoGuardado=this.productos.obtenerObjetoEnProductos();
                 }
                
                 return productoGuardado;
