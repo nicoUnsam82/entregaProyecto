@@ -42,6 +42,9 @@ io.on("actualizacion_productos", socket => {
 app.io =io;
 
 const PORT = process.env.PORT || 8080
+
+
+
 httpServer.listen(PORT, () => {
 
     console.log(`INICIO SERVIDOR: http://localhost:${httpServer.address().port}`)
