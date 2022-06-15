@@ -7,4 +7,4 @@ const rutaInvalida =(req,res,next)=>{
     next();
   }
   
-  module.exports = {rutaInvalida};
+  export default rutaInvalida;

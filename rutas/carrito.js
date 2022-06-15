@@ -1,12 +1,7 @@
-const cl_Carrito = require("../clases/carritoClase.js");
-const cl_CarritoMongoDb = require("../clases/carritoMongoDb.js");
-
-const express = require('express');
-const router = express.Router();
-
-let carrito = new cl_Carrito;
-let carritoMongoDb = new cl_CarritoMongoDb;
-
+import { Persistencia } from '../configuracionDePersistencia.js';
+import { Router } from 'express';
+import logger from '../logger.js'
+const router = Router();
 
 router.get('/carrito/:id/productos', (req, res) => {
 
@@ -17,16 +12,8 @@ router.get('/carrito/:id/productos', (req, res) => {
 
             }
             else {
-            const carritoProductos = await carrito.obtenerProductosPorCarritoId(req.params.id);
-            if(carritoProductos.length == 0){
-            const carritoProductosMongodb = await carritoMongoDb.buscarProductosPorIdCarrito({idCarrito:req.params.id});
-            if (carritoProductos.length != 0) {
-                carritoProductos =  carritoProductosMongodb;
-            }  
-
-            }//FIN DEL IF EN CASO DE QUE EN MEMORIA NO ENCUENTRE NADA
-
-            res.send(JSON.stringify(carritoProductos));
+                const carritoProductos = await Persistencia('CARRITO', 'MEMORIA', 'OBTENERPRODUCTOSENCARRITO', req.params.id, 'NULL');
+                res.send(JSON.stringify(carritoProductos));
             }//FIN DEL ELSE
         }//FIN ASYNC
         )();
@@ -42,10 +29,10 @@ router.get('/carrito/:id/productos', (req, res) => {
 router.post('/carrito', (req, res) => {
     try {
         (async () => {
-            console.log(req.body);
-            const idCarroGenerado = await carrito.generarCarro();
-            res.send(JSON.stringify(idCarroGenerado));
-            
+            logger.info('CONSOLE.LOG-> POST EN /CARRITO:', req.body);
+            const idCarritoGenerado = await Persistencia('CARRITO', 'MEMORIA', 'GENERARCARRITO', 'NULL', 'NULL');
+            res.send(JSON.stringify(idCarritoGenerado));
+
         }//FIN ASYNC
         )();
     }
@@ -69,10 +56,8 @@ router.post('/carrito/:id/productos', (req, res) => {
 
             }
             else {
-                const carritoConProducto= await carrito.guardarProductosPorCarritoId(req.params.id,req.body);
-                const datoGuardadoEnMongo =await carritoMongoDb.guardarCarritoConProductos(carritoConProducto);//GUARDO IDCARRO CON PRODUCTO ASIGNADO EN BASE DE MONGODB
-                console.log(datoGuardadoEnMongo);
-                res.send(JSON.stringify(carrito));
+                const productoGuardadoEnCarrito = await Persistencia('CARRITO', 'MEMORIA', 'GUARDARPRODUCTOENCARRITO', req.params.id, req.body);
+                res.send(JSON.stringify(productoGuardadoEnCarrito));
 
             }
 
@@ -99,8 +84,7 @@ router.delete('/carrito/:id', (req, res) => {
 
             }
             else {
-                const carritoEliminado = await carrito.borrarCarritoPorId(req.params.id) ;
-                await carritoMongoDb.borrarCarrito({idCarrito:req.params.id});//LO BORRO DE LA BASE MONGODB
+                const carritoEliminado = await Persistencia('CARRITO', 'MEMORIA', 'BORRARCARRITOPORID', req.params.id, 'NULL');
                 res.send(`id eliminado: ${req.params.id} y carritoProducto eliminado:${JSON.stringify(carritoEliminado)}`);
 
             }
@@ -125,7 +109,7 @@ router.delete('/carrito/:id/productos/:id_prod', (req, res) => {
 
             }
             else {
-                const productoDeCarritoEliminado = await carrito.borrarPorIdCarritoIdProducto(req.params.id,req.params.id_prod);
+                const productoDeCarritoEliminado = await Persistencia('CARRITO', 'MEMORIA', 'BORRARPORIDCARRITOIDPRODUCTO', req.params.id, req.params.id_prod);
                 res.send(`id carrito: ${req.params.id} y Producto eliminado del carrito:${JSON.stringify(productoDeCarritoEliminado)}`);
 
             }
@@ -144,6 +128,4 @@ router.delete('/carrito/:id/productos/:id_prod', (req, res) => {
 
 
 
-module.exports = router;
-
-
+export default router;

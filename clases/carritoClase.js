@@ -1,12 +1,14 @@
-const cl_Contenedor = require("../clases/contenedor.js");
+import cl_Contenedor from "../clases/contenedor.js";
+import logger from '../logger.js'
+
 //HABRIA QUE VER LA FORMA DE QUE NO ESTE, PARA QUE LA CLASE DATO NO DEPENDA DE LA CLASE CONTENEDOR(PASAR POR PARAMETRO PERO HAY QUE VER COMO YA TOMAS LAS FUNCIONES)
-module.exports = class Carrito{
+export default class Carrito {
     static asignarId = 0;
     static idBorradosCarrito = [];
 
     constructor() {
-        this.productos= new cl_Contenedor;
-        this.idCarrito= [];
+        this.productos = new cl_Contenedor;
+        this.idCarrito = [];
         this.horarioDeCreacionCarrito = Date.now()
 
     }//FIN DEL CONSTRUCTOR
@@ -18,10 +20,10 @@ module.exports = class Carrito{
             switch (largoidBorradosCarrito) {
 
                 case 0:
-                    Carrito.asignarId = Carrito.asignarId+1;
+                    Carrito.asignarId = Carrito.asignarId + 1;
                     this.idCarrito.push(Carrito.asignarId);
-                    const largoIdCarrito=this.idCarrito.length;
-                    return this.idCarrito[largoIdCarrito-1];
+                    const largoIdCarrito = this.idCarrito.length;
+                    return this.idCarrito[largoIdCarrito - 1];
                 default:
                     largoIdCarrito = this.idCarrito.length;
                     this.idCarrito[largoIdCarrito] = Carrito.idBorradosCarrito[0];
@@ -33,7 +35,7 @@ module.exports = class Carrito{
         }//FIN DEL TRY
         catch (e) {
 
-            console.error(new Error("ERROR EN GENERACION EN GENERAR CARRITO"));
+            logger.error(new Error("ERROR EN GENERACION EN GENERAR CARRITO"));
             throw (e);
 
 
@@ -63,7 +65,7 @@ module.exports = class Carrito{
         }//FIN DEL TRY
         catch (e) {
 
-            console.error(new Error("ERROR EN BORRAR CARRITO POR ID"));
+            logger.error(new Error("ERROR EN BORRAR CARRITO POR ID"));
             throw (e);
 
 
@@ -78,14 +80,14 @@ module.exports = class Carrito{
             let id = parseInt(idBusqueda);
             const idCarritoBuscado = this.idCarrito.filter(idBuscado => idBuscado == id);
             if (idCarritoBuscado) {
-               this.productos.guardar(objeto);
-               this.productos.idCarrito=idCarritoBuscado;
-               let productoGuardado;
-               if(this.productos.idCarrito==idBusqueda){
-                productoGuardado= this.productos.obtenerObjetoEnProductos();
-               }
-              
-               return productoGuardado;
+                this.productos.guardar(objeto);
+                this.productos.idCarrito = idCarritoBuscado;
+                let productoGuardado;
+                if (this.productos.idCarrito == idBusqueda) {
+                    productoGuardado = this.productos.obtenerObjetoEnProductos();
+                }
+
+                return productoGuardado;
             }
             else {
 
@@ -96,7 +98,7 @@ module.exports = class Carrito{
         }//FIN DEL TRY
         catch (e) {
 
-            console.error(new Error("ERROR EN GUARDAR PRODUCTOS DE CARRITO POR ID"));
+            logger.error(new Error("ERROR EN GUARDAR PRODUCTOS DE CARRITO POR ID"));
             throw (e);
 
 
@@ -111,14 +113,14 @@ module.exports = class Carrito{
             let id = parseInt(idBusqueda);
             const idCarritoBuscado = this.idCarrito.filter(idBuscado => idBuscado == id);
             if (idCarritoBuscado) {
-                this.productos.idCarrito=idCarritoBuscado;
+                this.productos.idCarrito = idCarritoBuscado;
                 let productoGuardado;
-                if(this.productos.idCarrito==idBusqueda){
-                 productoGuardado= this.productos.obtenerObjetoEnProductos();
+                if (this.productos.idCarrito == idBusqueda) {
+                    productoGuardado = this.productos.obtenerObjetoEnProductos();
                 }
-               
+
                 return productoGuardado;
-            
+
             }
             else {
 
@@ -129,7 +131,7 @@ module.exports = class Carrito{
         }//FIN DEL TRY
         catch (e) {
 
-            console.error(new Error("ERROR EN OBTENER PRODUCTOS DE CARRITO POR ID"));
+            logger.error(new Error("ERROR EN OBTENER PRODUCTOS DE CARRITO POR ID"));
             throw (e);
 
 
@@ -150,12 +152,12 @@ module.exports = class Carrito{
             let idProductoBorrar = parseInt(idProducto);
             const idCarritoBuscado = this.idCarrito.filter(idBuscado => idBuscado == idCarritoSeleccion);
             if (idCarritoBuscado) {
-                console.log(this.productos);
-                const idProductoAEliminar=this.productos.borrarObjetoPorId(idProductoBorrar);
-                if(idProductoAEliminar){
-                return idProductoAEliminar;
+                logger.info('EN FUNCION BORRAR POR ID DE CARRITO UN PRODUCTO:', this.productos);
+                const idProductoAEliminar = this.productos.borrarObjetoPorId(idProductoBorrar);
+                if (idProductoAEliminar) {
+                    return idProductoAEliminar;
                 }
-                else{
+                else {
                     return { error: 'producto no encontrado' };
                 }
 
@@ -169,7 +171,7 @@ module.exports = class Carrito{
         }//FIN DEL TRY
         catch (e) {
 
-            console.error(new Error("ERROR EN BORRAR PRODUCTO POR SU ID DE CARRITO POR ID"));
+            logger.error(new Error("ERROR EN BORRAR PRODUCTO POR SU ID DE CARRITO POR ID"));
             throw (e);
 
 

@@ -1,18 +1,17 @@
-const cl_Contenedor = require("../clases/contenedor.js");
-const cl_ContenedorMongoDb = require("../clases/contenedorMongoDb.js");
-const express = require('express');
-const router = express.Router();
+import { Persistencia } from '../configuracionDePersistencia.js';
+import { Router } from 'express';
+import logger from '../logger.js'
+const productos = Router();
 
-let contenedor = new cl_Contenedor;
-let contenedorMongoDb = new cl_ContenedorMongoDb;
-
-router.get('/productos', (req, res) => {
+//OPCIONES DE PERSISTENCIA SON MEMORIA O MONGOOSE
+productos.get('/productos', (req, res) => {
 
     try {
         (async () => {
-            const productos = await contenedor.obtenerObjetoEnProductos();
+            //const productos = await Persistencia ('PRODUCTOS','MEMORIA','OBTENERPRODUCTOS','NULL','NULL');
+            const productos = await Persistencia('PRODUCTOS', 'MONGOOSE', 'OBTENERPRODUCTOS', 'NULL', 'NULL');
             res.send(JSON.stringify(productos));
-            console.log(productos);
+            logger.info('CONSOLE.LOG -> GET DE PRODUCTOS:', productos);
         }//FIN ASYNC
         )();
     }
@@ -24,15 +23,16 @@ router.get('/productos', (req, res) => {
 
 });
 
-router.post('/productos', (req, res) => {
+productos.post('/productos', (req, res) => {
     try {
         (async () => {
-            console.log(req.body);
-            const producto = await contenedor.guardar(req.body);
-            const productoGuardadoMongoDb = await contenedorMongoDb.guardarProducto(producto);//GUARDO EL PRODUCTO EN LA BASE DE MONGODB
-            console.log(productoGuardadoMongoDb);
+            logger.info("CONSOLE.LOG ->POST PRODUCTOS:", req.body);
+            //const producto = await Persistencia ('PRODUCTOS','MEMORIA','GUARDARPRODUCTO',req.body,'NULL');
+            const producto = await Persistencia('PRODUCTOS', 'MONGOOSE', 'GUARDARPRODUCTO', req.body, 'NULL')
             res.send(JSON.stringify(producto));
-            req.app.io.sockets.emit("actualizacion_productos", await contenedor.obtenerObjetoEnProductos());
+            const productoDelPost = await Persistencia('PRODUCTOS', 'MONGOOSE', 'OBTENERPRODUCTOS', 'NULL', 'NULL');
+            logger.info("CONSOLE.LOG ->PRODUCTO A EMITIR POR IO SOCKET EN RUTA DE POST:", productoDelPost);
+            req.app.io.sockets.emit("actualizacion_productos", productoDelPost);
         }//FIN ASYNC
         )();
     }
@@ -46,7 +46,7 @@ router.post('/productos', (req, res) => {
 
 });
 
-router.get('/productos/:id', (req, res) => {
+productos.get('/productos/:id', (req, res) => {
 
     try {
         (async () => {
@@ -56,18 +56,11 @@ router.get('/productos/:id', (req, res) => {
 
             }
             else {
-                const producto = await contenedor.obtenerObjetoPorId(req.params.id);
-                if (producto.length == 0) {
-                    const productoMongoDb = await contenedorMongoDb.buscarProducto({ id: req.params.id })
-                    if (productoMongoDb.length != 0) {
 
-                        producto = productoMongoDb;
-
-                    }//EN CASO DE QUE LO ENCONTRO EN MONGO LO COPIO A PRODUCTO   
-                }//VERIFICO SI ESTA EN LA BASE DE MONGO Y NO EN MEMORIA
-
+                //const producto = await Persistencia ('PRODUCTOS','MEMORIA','OBTENERPRODUCTOPORID',req.params.id,'NULL');
+                const producto = await Persistencia('PRODUCTOS', 'MONGOOSE', 'OBTENERPRODUCTOPORID', req.params.id, 'NULL');
                 res.send(JSON.stringify(producto));
-                console.log(`${producto}`);
+                logger.info('CONSOLE.LOG -> GET PRODUCTO/ID:', `${producto}`);
 
             }
 
@@ -85,7 +78,7 @@ router.get('/productos/:id', (req, res) => {
 
 });
 
-router.put('/productos/:id', (req, res) => {
+productos.put('/productos/:id', (req, res) => {
 
     try {
         (async () => {
@@ -94,23 +87,10 @@ router.put('/productos/:id', (req, res) => {
 
             }
             else {
-                const productoViejo = await contenedorMongoDb.buscarProducto({ id: req.params.id });
-                const productoModificar = req.body;
-                if (productoViejo.nombreProducto != productoModificar.nombreProducto) {
-                    await contenedorMongoDb.modificarProducto({ id: req.params.id }, nombreProducto, productoModificar.nombreProducto);
-
-                }
-                if (productoViejo.precioProducto != productoModificar.precioProducto) {
-                    await contenedorMongoDb.modificarProducto({ id: req.params.id }, precioProducto, productoModificar.precioProducto);
-
-                }
-                if (productoViejo.urlProducto != productoModificar.urlProducto) {
-                    await contenedorMongoDb.modificarProducto({ id: req.params.id }, urlProducto, productoModificar.urlProducto);
-
-                }
-                const producto = await contenedor.actualizarObjetoPorId(req.params.id, req.body);
+                //const producto = await Persistencia ('PRODUCTOS','MEMORIA','ACTUALIZARPRODUCTOPORID',req.params.id,req.body);
+                const producto = await Persistencia('PRODUCTOS', 'MONGOOSE', 'ACTUALIZARPRODUCTOPORID', req.params.id, req.body);
                 res.send(`id actualizado ${req.params.id} y producto actualizado:${JSON.stringify(producto)}`);
-                console.log(`${producto}`);
+                logger.info('CONSOLE.LOG ->ACTUALIZAR PRODUCTO POR ID:', `${producto}`);
             }
         }//FIN ASYNC
         )();
@@ -124,7 +104,7 @@ router.put('/productos/:id', (req, res) => {
 
 });
 
-router.delete('/productos/:id', (req, res) => {
+productos.delete('/productos/:id', (req, res) => {
     try {
 
         (async () => {
@@ -133,8 +113,8 @@ router.delete('/productos/:id', (req, res) => {
 
             }
             else {
-                const producto = await contenedor.borrarObjetoPorId(req.params.id);
-                await contenedorMongoDb.borrarProducto({ id: req.params.id });//LO BORRAMOS DE LA BASE DE MONGO DB
+                //const producto = await Persistencia ('PRODUCTOS','MEMORIA','BORRARPRODUCTOPORID',req.params.id,'NULL');
+                const producto = await Persistencia('PRODUCTOS', 'MONGOOSE', 'BORRARPRODUCTOPORID', req.params.id, 'NULL');
                 res.send(`id eliminado: ${req.params.id} y producto eliminado:${JSON.stringify(producto)}`);
 
             }
@@ -150,6 +130,6 @@ router.delete('/productos/:id', (req, res) => {
 
 });
 
-module.exports = router;
+export default productos;
 
 

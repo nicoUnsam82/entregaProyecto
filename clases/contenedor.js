@@ -1,7 +1,9 @@
+import logger from '../logger.js'
 
 
-module.exports = class Contenedor {
-    productos =[];
+export default class Contenedor {
+    productos = [];
+    static idGlobal = 0;
     static idBorrados = [];
 
 
@@ -14,64 +16,63 @@ module.exports = class Contenedor {
 
         try {
 
-            let largoArrayObjetos= this.productos.length;
-            let idMasAlto= 0;
+            let largoArrayObjetos = this.productos.length;
+            let idMasAlto = 0;
             if (largoArrayObjetos > 0) {
                 idMasAlto = this.productos.reduce((anterior, proximo) => anterior > proximo.id ? anterior : proximo.id, 0);
 
             }//FIN DEL IF
-            let largoIdBorrados =Contenedor.idBorrados.length;
-            console.log(largoIdBorrados);
-            switch(largoIdBorrados){
+            let largoIdBorrados = Contenedor.idBorrados.length;
+            logger.info("CONSOLE.LOG -> LARGO DE ID BORRADOS:", largoIdBorrados);
+            switch (largoIdBorrados) {
 
-            case 0:
-                this.productos.push(objeto);
-                const idAsignar = idMasAlto + 1;
-                this.productos[largoArrayObjetos].id = idAsignar;
-                console.log(this.productos[idAsignar-1]);
-                return this.productos[idAsignar-1];
-            default:
-                this.productos.push(objeto);
-                let idAsignado =Contenedor.idBorrados[0]
-                this.productos[largoArrayObjetos].id = idAsignado;
-                Contenedor.idBorrados.shift();
-                console.log(this.productos[largoArrayObjetos]);
-                return this.productos[largoArrayObjetos];            
+                case 0:
+                    this.productos.push(objeto);
+                    const idAsignar = idMasAlto + 1;
+                    this.productos[largoArrayObjetos].id = idAsignar;
+                    logger.info("CONSOLE.LOG -> this.productos[idAsignar-1] EN FUNCION GUARDAR:", this.productos[idAsignar - 1]);
+                    return this.productos[idAsignar - 1];
+                default:
+                    this.productos.push(objeto);
+                    let idAsignado = Contenedor.idBorrados[0]
+                    this.productos[largoArrayObjetos].id = parseInt(idAsignado);
+                    Contenedor.idBorrados.shift();
+                    logger.info("CONSOLE.LOG -> this.productos[largoArrayObjetos] EN FUNCION GUARDAR:", this.productos[largoArrayObjetos]);
+                    return this.productos[largoArrayObjetos];
 
             }
-  
+
         }//FIN DEL TRY
         catch (e) {
 
-            console.error(new Error("ERROR EN GENERACION EN GUARDAR OBJETO"));
+            logger.error(new Error("ERROR EN GENERACION EN GUARDAR OBJETO"));
             throw (e);
 
 
 
         }//FIN DEL CATCH
 
-        
+
     }//FIN DE METODO GUARDAR
 
     async obtenerObjetoPorId(idBusqueda) {
         try {
-            let id =parseInt(idBusqueda);
-            console.log(id);
+            let id = parseInt(idBusqueda);
             const largoArrayObajetos = this.productos.length;
-            if (largoArrayObajetos > id) {
+            if (largoArrayObajetos >= id) {
                 const producto = this.productos.filter(idBuscado => idBuscado.id == idBusqueda);
                 return producto;
             }
             else {
 
-                return { error : 'producto no encontrado' };
+                return { error: 'producto no encontrado' };
             }
 
 
         }//FIN DEL TRY
         catch (e) {
 
-            console.error(new Error("ERROR EN OBTENER OBJETO POR ID"));
+            logger.error(new Error("ERROR EN OBTENER OBJETO POR ID"));
             throw (e);
 
 
@@ -100,7 +101,7 @@ module.exports = class Contenedor {
         }//FIN DEL TRY
         catch (e) {
 
-            console.error(new Error("ERROR EN OBTENER TODOS LOS OBJETOS"));
+            logger.error(new Error("ERROR EN OBTENER TODOS LOS OBJETOS"));
             throw (e);
 
 
@@ -122,14 +123,14 @@ module.exports = class Contenedor {
             }
             else {
 
-                return { error : 'producto no encontrado' };
+                return { error: 'producto no encontrado' };
             }
 
 
         }//FIN DEL TRY
         catch (e) {
 
-            console.error(new Error("ERROR EN BORRAR OBJETO POR ID"));
+            logger.error(new Error("ERROR EN BORRAR OBJETO POR ID"));
             throw (e);
 
 
@@ -146,7 +147,7 @@ module.exports = class Contenedor {
         }//FIN DEL TRY
         catch (e) {
 
-            console.error(new Error("ERROR EN BORRAR TODOS LOS OBJETOS"));
+            logger.error(new Error("ERROR EN BORRAR TODOS LOS OBJETOS"));
             throw (e);
 
 
@@ -156,26 +157,27 @@ module.exports = class Contenedor {
 
     }//FIN DEL METODO BORRAR OBJETO TODOS LOS OBJETOS
 
-    async actualizarObjetoPorId(idBusqueda,objeto) {
+    async actualizarObjetoPorId(idBusqueda, objeto) {
+        logger.info("CONSOLE.LOG-> OBJETO QUE LLEGA PARA ACTUALIZAR PRODUCTO POR ID:", objeto);
         try {
 
             const largoArrayObajetos = this.productos.length;
             if (largoArrayObajetos > idBusqueda) {
-                this.productos[idBusqueda-1].nombreProducto=objeto.nombreProducto;
-                this.productos[idBusqueda-1].precio=objeto.precio;
-                this.productos[idBusqueda-1].thumbnail=objeto.thumbnail;
-                return this.productos[idBusqueda-1];
-                
+                this.productos[idBusqueda - 1].nombreProducto = objeto.nombreProducto;
+                this.productos[idBusqueda - 1].precio = objeto.precio;
+                this.productos[idBusqueda - 1].thumbnail = objeto.thumbnail;
+                return this.productos[idBusqueda - 1];
+
             }
             else {
 
-                return { error : 'producto no encontrado' };
+                return { error: 'producto no encontrado' };
             }
 
         }//FIN DEL TRY
         catch (e) {
 
-            console.error(new Error("ERROR EN ACTUALIZAR OBJETO POR ID"));
+            logger.error(new Error("ERROR EN ACTUALIZAR OBJETO POR ID"));
             throw (e);
 
 
